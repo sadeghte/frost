@@ -70,11 +70,11 @@ pub mod round1 {
     pub struct Package<C: Ciphersuite> {
         /// Serialization header
         #[getter(skip)]
-        pub(crate) header: Header<C>,
+        pub header: Header<C>,
         /// The public commitment from the participant (C_i)
-        pub(crate) commitment: VerifiableSecretSharingCommitment<C>,
+        pub commitment: VerifiableSecretSharingCommitment<C>,
         /// The proof of knowledge of the temporary secret (σ_i = (R_i, μ_i))
-        pub(crate) proof_of_knowledge: Signature<C>,
+        pub proof_of_knowledge: Signature<C>,
     }
 
     impl<C> Package<C>
@@ -119,17 +119,17 @@ pub mod round1 {
     #[derive(Clone, PartialEq, Eq, Getters)]
     pub struct SecretPackage<C: Ciphersuite> {
         /// The identifier of the participant holding the secret.
-        pub(crate) identifier: Identifier<C>,
+        pub identifier: Identifier<C>,
         /// Coefficients of the temporary secret polynomial for the participant.
         /// These are (a_{i0}, ..., a_{i(t−1)})) which define the polynomial f_i(x)
         #[getter(skip)]
-        pub(crate) coefficients: Vec<Scalar<C>>,
+        pub coefficients: Vec<Scalar<C>>,
         /// The public commitment for the participant (C_i)
-        pub(crate) commitment: VerifiableSecretSharingCommitment<C>,
+        pub commitment: VerifiableSecretSharingCommitment<C>,
         /// The minimum number of signers.
-        pub(crate) min_signers: u16,
+        pub min_signers: u16,
         /// The total number of signers.
-        pub(crate) max_signers: u16,
+        pub max_signers: u16,
     }
 
     impl<C> SecretPackage<C>
@@ -194,9 +194,9 @@ pub mod round2 {
     pub struct Package<C: Ciphersuite> {
         /// Serialization header
         #[getter(skip)]
-        pub(crate) header: Header<C>,
+        pub header: Header<C>,
         /// The secret share being sent.
-        pub(crate) signing_share: SigningShare<C>,
+        pub signing_share: SigningShare<C>,
     }
 
     impl<C> Package<C>
@@ -237,15 +237,15 @@ pub mod round2 {
     #[derive(Clone, PartialEq, Eq, Getters)]
     pub struct SecretPackage<C: Ciphersuite> {
         /// The identifier of the participant holding the secret.
-        pub(crate) identifier: Identifier<C>,
+        pub identifier: Identifier<C>,
         /// The public commitment from the participant (C_i)
-        pub(crate) commitment: VerifiableSecretSharingCommitment<C>,
+        pub commitment: VerifiableSecretSharingCommitment<C>,
         /// The participant's own secret share (f_i(i)).
-        pub(crate) secret_share: Scalar<C>,
+        pub secret_share: Scalar<C>,
         /// The minimum number of signers.
-        pub(crate) min_signers: u16,
+        pub min_signers: u16,
         /// The total number of signers.
-        pub(crate) max_signers: u16,
+        pub max_signers: u16,
     }
 
     impl<C> core::fmt::Debug for SecretPackage<C>

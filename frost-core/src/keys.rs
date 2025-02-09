@@ -319,7 +319,7 @@ where
         Self(coefficients)
     }
 
-    /// Returns serialized coefficent commitments
+    /// Returns serialized coefficient commitments
     pub fn serialize(&self) -> Result<Vec<Vec<u8>>, Error<C>> {
         self.0
             .iter()
@@ -423,7 +423,18 @@ where
         let result = evaluate_vss(self.identifier, &self.commitment);
 
         if !(f_result == result) {
-            return Err(Error::InvalidSecretShare);
+            // The culprit needs to be identified by the caller if needed,
+            // because this function is called in two different contexts:
+            // - after trusted dealer key generation, by the participant who
+            //   receives the SecretShare. In that case it does not make sense
+            //   to identify themselves as the culprit, since the issue was with
+            //   the Coordinator or in the communication.
+            // - during DKG, where a "fake" SecretShare is built just to reuse
+            //   the verification logic and it does make sense to identify the
+            //   culprit. Note that in this case, self.identifier is the caller's
+            //   identifier and not the culprit's, so we couldn't identify
+            //   the culprit inside this function anyway.
+            return Err(Error::InvalidSecretShare { culprit: None });
         }
 
         Ok((
@@ -474,11 +485,7 @@ pub fn generate_with_dealer<C: Ciphersuite, R: RngCore + CryptoRng>(
     identifiers: IdentifierList<C>,
     rng: &mut R,
 ) -> Result<(BTreeMap<Identifier<C>, SecretShare<C>>, PublicKeyPackage<C>), Error<C>> {
-    let mut bytes = [0; 64];
-    rng.fill_bytes(&mut bytes);
-
     let key = SigningKey::new(rng);
-
     split(&key, max_signers, min_signers, identifiers, rng)
 }
 

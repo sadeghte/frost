@@ -54,10 +54,16 @@ where
         Self::nonce_generate_from_random_bytes(secret, random_bytes)
     }
 
+    /// Create a nonce from a scalar.
+    #[cfg_attr(feature = "internals", visibility::make(pub))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "internals")))]
     fn from_scalar(scalar: <<<C as Ciphersuite>::Group as Group>::Field as Field>::Scalar) -> Self {
         Self(SerializableScalar(scalar))
     }
 
+    /// Convert a nonce into a scalar.
+    #[cfg_attr(feature = "internals", visibility::make(pub))]
+    #[cfg_attr(docsrs, doc(cfg(feature = "internals")))]
     pub(crate) fn to_scalar(
         self,
     ) -> <<<C as Ciphersuite>::Group as Group>::Field as Field>::Scalar {
@@ -317,7 +323,6 @@ where
     /// Computes the [commitment share] from these round one signing commitments.
     ///
     /// [commitment share]: https://datatracker.ietf.org/doc/html/rfc9591#name-signature-share-aggregation
-    #[cfg(any(feature = "internals", feature = "cheater-detection"))]
     #[cfg_attr(feature = "internals", visibility::make(pub))]
     #[cfg_attr(docsrs, doc(cfg(feature = "internals")))]
     pub(super) fn to_group_commitment_share(
@@ -357,6 +362,21 @@ where
 /// and the binding factor _rho_.
 #[derive(Clone, Copy, PartialEq)]
 pub struct GroupCommitmentShare<C: Ciphersuite>(pub(super) Element<C>);
+
+impl<C: Ciphersuite> GroupCommitmentShare<C> {
+    /// Create from an element.
+    #[cfg_attr(feature = "internals", visibility::make(pub))]
+    #[allow(unused)]
+    pub(crate) fn from_element(element: Element<C>) -> Self {
+        Self(element)
+    }
+
+    /// Return the underlying element.
+    #[cfg_attr(feature = "internals", visibility::make(pub))]
+    pub(crate) fn to_element(self) -> Element<C> {
+        self.0
+    }
+}
 
 /// Encode the list of group signing commitments.
 ///

@@ -117,7 +117,7 @@ pub mod round1 {
     /// # Security
     ///
     /// This package MUST NOT be sent to other participants!
-    #[derive(Clone, PartialEq, Eq, Getters)]
+    #[derive(Clone, PartialEq, Eq)]
     #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
     #[cfg_attr(feature = "serde", serde(bound = "C: Ciphersuite"))]
     #[cfg_attr(feature = "serde", serde(deny_unknown_fields))]
@@ -126,7 +126,7 @@ pub mod round1 {
         pub identifier: Identifier<C>,
         /// Coefficients of the temporary secret polynomial for the participant.
         /// These are (a_{i0}, ..., a_{i(t−1)})) which define the polynomial f_i(x)
-        #[getter(skip)]
+        /// #[getter(skip)]
         pub coefficients: Vec<SerializableScalar<C>>,
         /// The public commitment for the participant (C_i)
         pub commitment: VerifiableSecretSharingCommitment<C>,
